@@ -1,0 +1,23 @@
+version: '2'
+services:
+
+  pets:
+    container_name: pets-dev-container
+    image: darteaga/pets:sma-example01
+    links:
+      - mongodb:mongodb
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 80:80
+    restart: always
+
+  mongodb:
+    container_name: mongodb-container
+    image: mongo
+    ports:
+      - 27017:27017
+#    volumes:
+#      - ./data:/data/db
+
+    restart: always

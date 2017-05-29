@@ -1,0 +1,9 @@
+---
+development:
+  port: 5000
+  db:
+    mongoUrl: mongodb://192.168.99.100/pets
+production:
+  port: 80
+  db:
+    mongoUrl: mongodb://mongodb/pets
