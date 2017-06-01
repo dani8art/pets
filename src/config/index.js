@@ -5,3 +5,5 @@ var fs = require('fs'),
 
 
 module.exports = jsyaml.safeLoad(fs.readFileSync(__dirname + '/config.yaml'))[process.env.NODE_ENV || 'development'];
+
+module.exports.initialData = process.env.PETS_INITIAL_DATA || module.exports.initialData;

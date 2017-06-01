@@ -1,0 +1,15 @@
+[{
+        "name": "Fuffy",
+        "tags": [
+            "Cat",
+            "White"
+        ]
+    },
+    {
+        "name": "Dockito",
+        "tags": [
+            "Dog",
+            "Black"
+        ]
+    }
+]

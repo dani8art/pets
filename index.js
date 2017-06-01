@@ -12,7 +12,7 @@ var petsSchema = require('./src/schema/pet.json');
 
 var Pets = new mongoose.Schema(petsSchema);
 // Register new models with mongoose.
-mongoose.model('pets', Pets);
+var PetsModel = mongoose.model('pets', Pets);
 // Create a simple controller.  By default these HTTP methods
 // are activated: HEAD, GET, POST, PUT, DELETE
 baucis.rest('pets');
@@ -29,5 +29,11 @@ app.use('/bower_components', express.static(__dirname + '/public/bower_component
 var port = config.port;
 
 app.listen(port, () => {
+    if (config.initialData == 'true') {
+        var data = require('./src/schema/initialData.json');
+        data.forEach(function (pet) {
+            new PetsModel(pet).save();
+        });
+    }
     console.log("Your API is running on (http://localhost:%d)", port);
 });

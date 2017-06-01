@@ -1,9 +1,11 @@
 ---
 development:
+  initialData: true
   port: 5000
   db:
     mongoUrl: mongodb://192.168.99.100/pets
 production:
+  initialData: false
   port: 80
   db:
     mongoUrl: mongodb://mongodb/pets
