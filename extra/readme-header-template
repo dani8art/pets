@@ -1,3 +1,7 @@
+This project contains an example of RESTful API which is developed in Node JS, using Mongoose and Baucis JS. The main objective is to have a microservice for testing others microservices, infrastructures, new plugins, new npm modules and new integrations.
+
+See a live demo
+
 [![Build Status](https://travis-ci.org/<%= pkg.repository.github.replace(/http:\/\/github.com\//,"") %>.svg?branch=master)](https://travis-ci.org/<%= pkg.repository.github %>)
 
 The version <%= pkg.version %> is the latest stable version of <%= pkg.name %> component.
