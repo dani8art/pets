@@ -3,6 +3,6 @@
 The version <%= pkg.version %> is the latest stable version of <%= pkg.name %> component.
 see [release note](<%= pkg.repository.github %>/releases/tag/<%= pkg.version %>) for details.
 
-- Read [documentation](./docs) to see details of `<%= pkg.name %>`.
+- Read [documentation](./docs) to know more about `<%= pkg.name %>`.
 
 - See [Docker Hub](<%= pkg.docker.url %>) also.
