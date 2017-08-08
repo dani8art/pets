@@ -2,10 +2,10 @@ version: '2'
 services:
 
   pets:
-    container_name: pets-dev-container
-    image: darteaga/pets:sma-example01
+    container_name: pets-container
+    image: darteaga/pets
     links:
-      - mongodb:mongodb
+      - mongodb
     environment:
       - NODE_ENV=production
     ports:
