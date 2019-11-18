@@ -4,7 +4,7 @@ const dcManger = require("docker-composer-manager");
 const src = require("../src/api");
 
 describe("API Test", function() {
-  this.timeout(30000);
+  this.timeout(300000);
   let server;
 
   before(done => {
