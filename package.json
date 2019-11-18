@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha --reporter spec --require tests/00-bootstrap tests/**/*.test.js"
+    "test": "mocha --reporter spec --require tests/bootstrap tests/**/*.test.js"
   },
   "nodemonConfig": {
     "ignore": [

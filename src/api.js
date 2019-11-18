@@ -32,8 +32,12 @@ async function deploy() {
 
   const initialDataPromises = [];
   if (conf.initialData) {
-    const pets = server.inject({ method: "GET", url: "/api/v1/pets" });
-    if (pets.length === 0) {
+    const response = await server.inject({
+      method: "GET",
+      url: "/api/v1/pets"
+    });
+
+    if (response.result._embedded.pets.length <= 0) {
       initialData.forEach(function(pet) {
         initialDataPromises.push(
           server.inject({ method: "POST", url: "/api/v1/pets", payload: pet })

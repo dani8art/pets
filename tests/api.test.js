@@ -1,7 +1,7 @@
 const request = require("request");
 const dcManger = require("docker-composer-manager");
 
-const src = require("../src/pets-api");
+const src = require("../src/api");
 
 describe("API Test", function() {
   this.timeout(30000);
