@@ -1,7 +1,0 @@
-{
-    "name": "string",
-    "tags": {
-        "type": "array",
-        "items": "string"
-    }
-}

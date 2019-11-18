@@ -1,0 +1,106 @@
+version: 2.1
+
+references:
+  js_deps_cache_key: &js_deps_cache_key v1-dependency-\{{ checksum "package-lock.json" }}
+
+master_only: &master_only
+  filters:
+    branches:
+      only: master
+
+commands:
+  git_authoring:
+    description: Authoring git commit.
+    steps:
+      - run: git config --global push.default matching
+      - run: git config --global user.email "{{git.user.email}}"
+      - run: git config --global user.name "{{git.user.name}}"
+
+jobs:
+  build:
+    docker:
+      - image: {{build.image}}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *js_deps_cache_key
+      - run:
+          name: Install dependencies.
+          command: {{build.install}}
+      {{#if build.command}}
+      - run:
+          name: Build command
+          command: {{build.command}}
+      {{/if}}
+      - save_cache:
+          paths:
+            {{#each cache}}
+            - {{this}}
+            {{/each}}
+          key: *js_deps_cache_key
+
+  test:
+    docker:
+      - image: {{test.image}}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *js_deps_cache_key
+      - run:
+          name: Execute unit tests.
+          command: {{test.command}}
+
+  {{#if release}}
+  release:
+    docker:
+      - image: {{release.image}}
+    steps:
+      - checkout
+      - git_authoring
+      - restore_cache:
+          keys:
+            - *js_deps_cache_key
+      - run:
+          name: Bump and publish the new version.
+          command: {{release.command}}
+  {{/if}}
+
+  {{#if deploy}}
+  deploy:
+    docker:
+      - image: {{deploy.image}}
+    steps:
+      - checkout
+      - run:
+          name: Get latest changes from the repository.
+          command: git pull
+      - run:
+          name: Authenticate against npm registry.
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
+      - run:
+          name: Deploying {{artifact.name}}.
+          command: {{deploy.command}}
+  {{/if}}
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      {{#if release}}
+      - release:
+          <<: *master_only
+          requires:
+            - test
+      {{/if}}
+      {{#if deploy}}
+      - deploy:
+          <<: *master_only
+          requires:
+            - release
+      {{/if}}

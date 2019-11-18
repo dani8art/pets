@@ -1,23 +1,26 @@
-version: '2'
+version: "2"
 services:
-
   pets:
     container_name: pets-container
     image: darteaga/pets
     links:
       - mongodb
     environment:
-      - NODE_ENV=production
+      - HOST=localhost
+      - SERVER_PORT=4000
+      - MONGO_URL=mongodb://mongodb:27017/pets
     ports:
-      - 80:80
+      - 4000:4000
     restart: always
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongodb-container
     image: mongo
     ports:
       - 27017:27017
-#    volumes:
-#      - ./data:/data/db
+    #    volumes:
+    #      - ./data:/data/db
 
     restart: always

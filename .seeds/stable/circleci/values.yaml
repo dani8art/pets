@@ -1,0 +1,20 @@
+artifact:
+  name: Default name
+git:
+  user:
+    name: Totem Bot
+    email: totem-bot@darteaga.com
+cache:
+  - node_modules
+build:
+  image: 'circleci/node:12'
+  install: npm i
+test:
+  image: 'circleci/node:12'
+  command: npm test
+release:
+  image: 'circleci/node:12'
+  command: npm run release
+deploy:
+  image: 'circleci/node:12'
+  command: npm publish
