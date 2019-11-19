@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha --reporter spec --require tests/bootstrap tests/**/*.test.js"
+    "test": "mocha --reporter spec --require test/bootstrap test/**/*.test.js"
   },
   "nodemonConfig": {
     "ignore": [
@@ -28,6 +28,7 @@
     "@hapi/hapi": "^18.4.0",
     "@hapi/joi": "^15.0.0",
     "mongoose": "^5.7.10",
+    "request-promise-native": "^1.0.8",
     "rest-hapi-gen": "^0.0.3"
   },
   "devDependencies": {

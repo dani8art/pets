@@ -1,4 +1,4 @@
-version: "2"
+version: '2'
 services:
   pets:
     container_name: pets-container
@@ -17,7 +17,7 @@ services:
 
   mongodb:
     container_name: mongodb-container
-    image: mongo
+    image: bitnami/mongodb:4.2-debian-9
     ports:
       - 27017:27017
     #    volumes:

@@ -1,0 +1,8 @@
+.github
+.seeds
+extra
+public
+test
+CHANGELOG.md
+docker-compose.yaml
+postman-collection.json

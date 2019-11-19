@@ -1,3 +1,9 @@
-FROM node:7-onbuild
+FROM bitnami/node:12-prod
 
-EXPOSE 5000 80
+COPY . /app
+
+WORKDIR /app
+
+EXPOSE 4001
+
+CMD node server.js
