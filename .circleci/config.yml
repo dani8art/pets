@@ -36,9 +36,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:12
-
       - image: bitnami/mongodb:4.2-debian-9
-
     environment:
       NODE_ENV: ci
     steps:
@@ -62,20 +60,24 @@ jobs:
   #     - run:
   #         name: Bump and publish the new version.
   #         command: npm run release
-  # deploy:
-  #   docker:
-  #     - image: circleci/node:12
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Get latest changes from the repository.
-  #         command: git pull
-  #     - run:
-  #         name: Authenticate against npm registry.
-  #         command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
-  #     - run:
-  #         name: Deploying Default name.
-  #         command: npm publish
+  publish:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - *js_deps_cache_key
+      - run:
+          name: Docker login
+          command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image.
+          command: docker build -t company/app:$CIRCLE_BRANCH .
+      - run:
+          name: Publish to public dockerhub.
+          command: docker push company/app:$CIRCLE_BRANCH
 
 workflows:
   version: 2
@@ -89,7 +91,7 @@ workflows:
       #     <<: *master_only
       #     requires:
       #       - test
-      # - deploy:
-      #     <<: *master_only
-      #     requires:
-      #       - release
+      - publish:
+          <<: *master_only
+          requires:
+            - test
