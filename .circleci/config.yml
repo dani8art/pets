@@ -60,6 +60,7 @@ jobs:
   #     - run:
   #         name: Bump and publish the new version.
   #         command: npm run release
+
   publish:
     docker:
       - image: circleci/node:12
@@ -74,10 +75,10 @@ jobs:
           command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: Build docker image.
-          command: docker build -t company/app:$CIRCLE_BRANCH .
+          command: docker build -t darteaga/pets:$CIRCLE_BRANCH .
       - run:
           name: Publish to public dockerhub.
-          command: docker push company/app:$CIRCLE_BRANCH
+          command: docker push darteaga/pets:$CIRCLE_BRANCH
 
 workflows:
   version: 2
