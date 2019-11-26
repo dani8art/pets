@@ -1,0 +1,102 @@
+templates:
+  - .release-it.json
+  - .circleci/config.yml
+scripts:
+  beforePlant: echo "execute before plant circleci seed"
+  afterPlant: >-
+    npm i --save-dev @commitlint/cli@^8.2.0
+    @commitlint/config-conventional@^8.2.0
+    @release-it/conventional-changelog@^1.1.0
+values:
+  artifact:
+    schema:
+      type: string
+    default: circleci
+  git:
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - name
+        - email
+    default:
+      name: Totem Bot
+      email: totem-bot@darteaga.com
+  cache:
+    schema:
+      type: array
+      items:
+        type: string
+    default:
+      - node_modules
+  build:
+    schema:
+      type: object
+      properties:
+        cmd:
+          type: string
+      required:
+        - cmd
+    default:
+      noop: noop
+  test:
+    schema:
+      type: object
+      properties:
+        cmd:
+          type: string
+        dependencies:
+          type: array
+          items:
+            type: string
+      required:
+        - cmd
+    default:
+      cmd: npm test
+      dependencies:
+        - 'bitnami/mongodb:4.2-debian-9'
+  release:
+    schema:
+      type: object
+      properties:
+        enable:
+          type: boolean
+    default:
+      enable: true
+  deployment:
+    schema:
+      type: object
+      properties:
+        enable:
+          type: boolean
+        package_type:
+          type: string
+        docker:
+          type: object
+          properties:
+            image:
+              type: string
+            additionalTags:
+              type: array
+              items:
+                type: string
+    default:
+      enable: true
+      packageType: docker
+      docker:
+        image: darteaga/pets
+        additionalTags:
+          - latest
+      npm: {}
+command_schema:
+  schema:
+    type: object
+    properties:
+      cmd:
+        type: string
+    required:
+      - cmd

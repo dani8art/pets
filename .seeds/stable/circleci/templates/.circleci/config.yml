@@ -13,25 +13,21 @@ commands:
     description: Authoring git commit.
     steps:
       - run: git config --global push.default matching
-      - run: git config --global user.email "{{git.user.email}}"
-      - run: git config --global user.name "{{git.user.name}}"
+      - run: git config --global user.email "{{git.email}}"
+      - run: git config --global user.name "{{git.name}}"
 
 jobs:
   build:
     docker:
-      - image: {{build.image}}
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
           keys:
             - *js_deps_cache_key
-      - run:
-          name: Install dependencies.
-          command: {{build.install}}
-      {{#if build.command}}
-      - run:
-          name: Build command
-          command: {{build.command}}
+      - run: npm ci
+      {{#if build.cmd}}
+      - run: {{build.cmd}}
       {{/if}}
       - save_cache:
           paths:
@@ -42,46 +38,62 @@ jobs:
 
   test:
     docker:
-      - image: {{test.image}}
+      - image: circleci/node:12
+    {{#each test.dependencies}}
+      - image: {{this}}
+    {{/each}}
+    environment:
+      NODE_ENV: ci
     steps:
       - checkout
       - restore_cache:
           keys:
             - *js_deps_cache_key
-      - run:
-          name: Execute unit tests.
-          command: {{test.command}}
+      - run: {{test.cmd}}
 
-  {{#if release}}
+  {{#if release.enable}}
   release:
     docker:
-      - image: {{release.image}}
+      - image: circleci/node:12
     steps:
       - checkout
       - git_authoring
       - restore_cache:
           keys:
             - *js_deps_cache_key
-      - run:
-          name: Bump and publish the new version.
-          command: {{release.command}}
+      - run: npm run release
   {{/if}}
 
-  {{#if deploy}}
+  {{#if deployment.enable}}
   deploy:
     docker:
-      - image: {{deploy.image}}
+      - image: circleci/node:12
     steps:
       - checkout
-      - run:
-          name: Get latest changes from the repository.
-          command: git pull
+      - run: git pull  # get all the changes before release step changes.
+    {{#if deployment.packageType "===" "docker"}}
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - *js_deps_cache_key
+      {{#if release.enable}}
+      - run: echo 'export MAIN_TAG="$(npm run --silent get:version)"' >> $BASH_ENV
+      {{else}}
+      - run: echo 'export MAIN_TAG="$CIRCLE_BRANCH"' >> $BASH_ENV
+      {{/if}}
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker build -t {{deployment.docker.image}}:$MAIN_TAG .
+      - run: docker push {{deployment.docker.image}}:$MAIN_TAG
+      {{#each deployment.docker.additionalTags}}
+      - run: docker push {{@root.deployment.docker.image}}:{{this}}
+      {{/each}}
+    {{else}}
       - run:
           name: Authenticate against npm registry.
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
-      - run:
-          name: Deploying {{artifact.name}}.
-          command: {{deploy.command}}
+      - run: npm publish
+    {{/if}}
+
   {{/if}}
 
 workflows:
@@ -92,15 +104,19 @@ workflows:
       - test:
           requires:
             - build
-      {{#if release}}
+      {{#if release.enable}}
       - release:
           <<: *master_only
           requires:
             - test
       {{/if}}
-      {{#if deploy}}
+      {{#if deployment.enable}}
       - deploy:
           <<: *master_only
           requires:
+          {{#if release.enable}}
             - release
+          {{else}}
+            - test
+          {{/if}}
       {{/if}}
