@@ -69,6 +69,7 @@ jobs:
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker build -t darteaga/pets:$MAIN_TAG .
       - run: docker push darteaga/pets:$MAIN_TAG
+      - run: docker tag darteaga/pets:$MAIN_TAG darteaga/pets:latest
       - run: docker push darteaga/pets:latest
 
 

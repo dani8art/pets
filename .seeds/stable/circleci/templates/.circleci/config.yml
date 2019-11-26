@@ -85,6 +85,7 @@ jobs:
       - run: docker build -t {{deployment.docker.image}}:$MAIN_TAG .
       - run: docker push {{deployment.docker.image}}:$MAIN_TAG
       {{#each deployment.docker.additionalTags}}
+      - run: docker tag {{@root.deployment.docker.image}}:$MAIN_TAG {{@root.deployment.docker.image}}:{{this}}
       - run: docker push {{@root.deployment.docker.image}}:{{this}}
       {{/each}}
     {{else}}
