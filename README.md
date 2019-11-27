@@ -8,7 +8,7 @@ See [live demo](https://pets.darteaga.com)
 
 ### Support
 
-- `Node.js` >= 12.x
+- `Node.js >= 12.x`
 
 ## TL;DR;
 
@@ -32,15 +32,15 @@ npm start
 
 ## Pets API configuration
 
-It can be configured using some evironment variable.
+It can be configured using some environment variable.
 
-| Option            | Type         | Description                                                                                                  |
-| ----------------- | ------------ | ------------------------------------------------------------------------------------------------------------ |
-| MONGO_URL         | `string`     | `Optional` The mongo URL to be used by mongoose. Default: `mongodb://localhost:27017/pets`.                  |
-| PETS_INITIAL_DATA | `true|false` | `Optional` Whether an initial data should be loaded. Default: `true`.                                        |
-| SERVER_ADDRESS    | `string`     | `Optional` IP address where the server is attached. Default: `0.0.0.0`.                                      |
-| SERVER_HOSTNAME   | `string`     | `Optional` Hostname where the server is exposed, It is used to generate HATEOAS links. Default: `localhost`. |
-| SERVER_PORT       | `string`     | `Optional` Port where the server is attached. Default: `4001`.                                               |
+| Option            | Type      | Description                                                                                                  |
+| ----------------- | --------- | ------------------------------------------------------------------------------------------------------------ |
+| MONGO_URL         | `string`  | `Optional` The mongo URL to be used by mongoose. Default: `mongodb://localhost:27017/pets`.                  |
+| PETS_INITIAL_DATA | `boolean` | `Optional` Whether an initial data should be loaded. Default: `true`.                                        |
+| SERVER_ADDRESS    | `string`  | `Optional` IP address where the server is attached. Default: `0.0.0.0`.                                      |
+| SERVER_HOSTNAME   | `string`  | `Optional` Hostname where the server is exposed, It is used to generate HATEOAS links. Default: `localhost`. |
+| SERVER_PORT       | `string`  | `Optional` Port where the server is attached. Default: `4001`.                                               |
 
 ## Deploy using docker
 
