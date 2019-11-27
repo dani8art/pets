@@ -2,7 +2,8 @@ module.exports = () => {
   return {
     initialData: new Boolean(process.env.PETS_INITIAL_DATA).valueOf() || true,
     server: {
-      host: process.env.SERVER_HOST,
+      address: process.env.SERVER_ADDRESS || 'localhost',
+      hostname: process.env.SERVER_HOSTNAME,
       port: parseInt(process.env.SERVER_PORT) || 4001
     },
     mongo: {
