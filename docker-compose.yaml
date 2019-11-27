@@ -2,11 +2,12 @@ version: '2'
 services:
   pets:
     container_name: pets-container
+    build: .
     image: darteaga/pets
     links:
       - mongodb
     environment:
-      - HOST=localhost
+      - SERVER_HOSTNAME=localhost
       - SERVER_PORT=4000
       - MONGO_URL=mongodb://mongodb:27017/pets
     ports:
@@ -18,9 +19,10 @@ services:
   mongodb:
     container_name: mongodb-container
     image: bitnami/mongodb:4.2-debian-9
-    ports:
-      - 27017:27017
-    #    volumes:
-    #      - ./data:/data/db
+    volumes:
+      - mongo_data:/data/db
 
     restart: always
+
+volumes:
+  mongo_data:
