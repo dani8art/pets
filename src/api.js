@@ -19,7 +19,7 @@ async function deploy() {
 
     server = Hapi.server({
       port: conf.server.port,
-      host: conf.server.host,
+      host: conf.server.hostname,
       address: conf.server.address
     });
 
