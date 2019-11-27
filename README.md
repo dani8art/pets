@@ -4,6 +4,8 @@
 
 > This repository contains an example of a RESTful API which is developed in Node.js, using MongoDB and [RESTHapi Gen](https://github.com/dani8art/rest-hapi-gen). The main objective of this project is to have a microservice for testing cloud native tools, infrastructures, Node.js plugins and more.
 
+See [live demo](https://pets.darteaga.com)
+
 ### Support
 
 - `Node.js` >= 12.x
