@@ -19,7 +19,8 @@ async function deploy() {
 
     server = Hapi.server({
       port: conf.server.port,
-      host: conf.server.host
+      host: conf.server.host,
+      address: conf.server.address
     });
 
     server.events.on('stop', async () => {
