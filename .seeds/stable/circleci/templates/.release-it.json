@@ -1,9 +1,9 @@
-{{#if release.enable}}
+{{#if release.enabled}}
 {
   "non-interactive": true,
   "preReleaseId": "next",
   "git": {
-    "commitMessage": "chore: %s [ci skip]",
+    "commitMessage": "chore: %s",
     "tagAnnotation": "%s",
     "requireUpstream": false,
     "requireCleanWorkingDir": false
