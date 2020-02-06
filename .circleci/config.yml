@@ -71,14 +71,12 @@ jobs:
             - *js_deps_cache_key
             - *js_deps_backup_key
       - run: |
-          ./.circleci/skip-when-release echo "Delivering containers" && \
-            export MAIN_TAG="$(npm run --silent get:version)" && \
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin && \
-            docker build -t darteaga/pets:$MAIN_TAG . && \
-            docker push darteaga/pets:$MAIN_TAG && \
-            docker tag darteaga/pets:$MAIN_TAG darteaga/pets:latest && \
-            docker push darteaga/pets:latest && \
-            echo "Containers delivered."
+          ./.circleci/skip-when-release  export MAIN_TAG="$(npm run --silent get:version)"
+          ./.circleci/skip-when-release  echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+          ./.circleci/skip-when-release  docker build -t darteaga/pets:$MAIN_TAG .
+          ./.circleci/skip-when-release  docker push darteaga/pets:$MAIN_TAG
+          ./.circleci/skip-when-release  docker tag darteaga/pets:$MAIN_TAG darteaga/pets:latest
+          ./.circleci/skip-when-release  docker push darteaga/pets:latest
 
 workflows:
   version: 2
