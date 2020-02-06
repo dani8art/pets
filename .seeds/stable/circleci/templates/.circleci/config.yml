@@ -1,5 +1,4 @@
 version: 2.1
-
 {{#if deployment.enabled}}
 {{#with deployment.s3}}
 orbs:
@@ -101,20 +100,20 @@ jobs:
             - *js_deps_cache_key
             - *js_deps_backup_key
       - run: |
-          if ./.circleci/skip-when-release exit 0 ; then
+          ./.circleci/skip-when-release echo "Delivering containers" && \
         {{#if release.enabled}}
-            echo 'export MAIN_TAG="$(npm run --silent get:version)"' >> $BASH_ENV
+            echo 'export MAIN_TAG="$(npm run --silent get:version)"' >> $BASH_ENV && \
         {{else}}
-            echo 'export MAIN_TAG="$CIRCLE_BRANCH"' >> $BASH_ENV
+            echo 'export MAIN_TAG="$CIRCLE_BRANCH"' >> $BASH_ENV && \
         {{/if}}
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-            docker build -t {{deployment.docker.image}}:$MAIN_TAG .
-            docker push {{deployment.docker.image}}:$MAIN_TAG
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin && \
+            docker build -t {{deployment.docker.image}}:$MAIN_TAG . && \
+            docker push {{deployment.docker.image}}:$MAIN_TAG && \
         {{#each deployment.docker.additionalTags}}
-            docker tag {{@root.deployment.docker.image}}:$MAIN_TAG {{@root.deployment.docker.image}}:{{this}}
-            docker push {{@root.deployment.docker.image}}:{{this}}
+            docker tag {{@root.deployment.docker.image}}:$MAIN_TAG {{@root.deployment.docker.image}}:{{this}} && \
+            docker push {{@root.deployment.docker.image}}:{{this}} && \
         {{/each}}
-          fi
+            echo "Containers delivered."
     {{/if}}
     {{#if deployment.packageType "===" "npm"}}
       - run:
