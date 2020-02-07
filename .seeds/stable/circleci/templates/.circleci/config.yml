@@ -100,26 +100,24 @@ jobs:
             - *js_deps_cache_key
             - *js_deps_backup_key
       - run: |
-          ./.circleci/skip-when-release echo "Delivering containers" && \
         {{#if release.enabled}}
-            echo 'export MAIN_TAG="$(npm run --silent get:version)"' >> $BASH_ENV && \
+          MAIN_TAG="$(npm run --silent get:version)"
         {{else}}
-            echo 'export MAIN_TAG="$CIRCLE_BRANCH"' >> $BASH_ENV && \
+          MAIN_TAG="$CIRCLE_BRANCH"
         {{/if}}
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin && \
-            docker build -t {{deployment.docker.image}}:$MAIN_TAG . && \
-            docker push {{deployment.docker.image}}:$MAIN_TAG && \
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+          docker build -t {{deployment.docker.image}}:$MAIN_TAG .
+          docker push {{deployment.docker.image}}:$MAIN_TAG
         {{#each deployment.docker.additionalTags}}
-            docker tag {{@root.deployment.docker.image}}:$MAIN_TAG {{@root.deployment.docker.image}}:{{this}} && \
-            docker push {{@root.deployment.docker.image}}:{{this}} && \
+          docker tag {{@root.deployment.docker.image}}:$MAIN_TAG {{@root.deployment.docker.image}}:{{this}}
+          docker push {{@root.deployment.docker.image}}:{{this}}
         {{/each}}
-            echo "Containers delivered."
     {{/if}}
     {{#if deployment.packageType "===" "npm"}}
       - run:
           name: Authenticate against npm registry.
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
-      - run: ./.circleci/skip-when-release npm publish
+      - run: npm publish
     {{/if}}
     {{#if deployment.packageType "===" "s3"}}
       - aws-s3/sync:
@@ -137,8 +135,7 @@ jobs:
             --acl public-read
       {{/each}}
     {{/if}}
-
-  {{/if}}
+{{/if}}
 
 workflows:
   version: 2
@@ -154,13 +151,13 @@ workflows:
           requires:
             - test
       {{/if}}
-      {{#if deployment.enabled}}
+{{#if deployment.enabled}}
+  delivering:
+    jobs:
       - deploy:
-          <<: *master_only
-          requires:
-          {{#if release.enabled}}
-            - release
-          {{else}}
-            - test
-          {{/if}}
-      {{/if}}
+          filter:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+{{/if}}
