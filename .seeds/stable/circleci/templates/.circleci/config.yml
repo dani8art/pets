@@ -92,7 +92,6 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-      - run: git pull  # get all the changes before release step changes.
     {{#if deployment.packageType "===" "docker"}}
       - setup_remote_docker
       - restore_cache:
@@ -155,7 +154,7 @@ workflows:
   delivering:
     jobs:
       - deploy:
-          filter:
+          filters:
             tags:
               only: /.*/
             branches:
