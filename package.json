@@ -1,6 +1,6 @@
 {
   "name": "pets-service",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "A simple CRUD of pets service for learnning and trainnig new tecnologies",
   "main": "index.js",
   "scripts": {
