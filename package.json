@@ -34,8 +34,8 @@
     "rest-hapi-gen": "^0.0.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@release-it/conventional-changelog": "^1.1.0",
     "chai": "^4.2.0",
     "chai-connect-middleware": "^0.3.1",

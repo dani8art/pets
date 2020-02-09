@@ -92,7 +92,7 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-    {{#if deployment.packageType "===" "docker"}}
+    {{#if deployment.type "===" "docker"}}
       - setup_remote_docker
       - restore_cache:
           keys:
@@ -112,13 +112,13 @@ jobs:
           docker push {{@root.deployment.docker.image}}:{{this}}
         {{/each}}
     {{/if}}
-    {{#if deployment.packageType "===" "npm"}}
+    {{#if deployment.type "===" "npm"}}
       - run:
           name: Authenticate against npm registry.
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
       - run: npm publish
     {{/if}}
-    {{#if deployment.packageType "===" "s3"}}
+    {{#if deployment.type "===" "s3"}}
       - aws-s3/sync:
           from: {{deployment.s3.bucket}}
           to: "s3://stable-seeds/{{artifact}}/{{deployment.s3.bucket}}"
@@ -129,7 +129,6 @@ jobs:
       - aws-s3/copy:
           from: {{this}}
           to: "s3://stable-seeds/{{@root.artifact}}/{{this}}"
-          overwrite: true
           arguments: |
             --acl public-read
       {{/each}}

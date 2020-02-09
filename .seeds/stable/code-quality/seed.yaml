@@ -1,2 +1,4 @@
 templates:
   - .prettierrc
+scripts: {}
+values: {}

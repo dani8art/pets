@@ -19,7 +19,7 @@ values:
     enabled: false
   deployment:
     enabled: false
-    packageType: docker
+    type: docker
     docker:
       image: darteaga/pets
       additionalTags:
